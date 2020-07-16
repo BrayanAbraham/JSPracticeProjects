@@ -25,18 +25,36 @@ UI.prototype.clearFields = function () {
   document.getElementById("isbn").value = "";
 };
 
+UI.prototype.showAlert = function (msg, classes) {
+  const div = document.createElement("div");
+  div.className = `alert ${classes}`;
+  div.appendChild(document.createTextNode(msg));
+  const container = document.querySelector(".container");
+  const form = document.getElementById("book-form");
+  container.insertBefore(div, form);
+  setTimeout(function () {
+    document.querySelector(".alert").remove();
+  }, 3000);
+};
+
 //Event Listeners
 document.getElementById("book-form").addEventListener("submit", function (e) {
   const title = document.getElementById("title").value,
     author = document.getElementById("author").value,
     isbn = document.getElementById("isbn").value;
+
   const book = new Book(title, author, isbn);
 
   const ui = new UI();
 
-  ui.addBookToList(book);
+  if (title === "" || author === "" || isbn === "") {
+    ui.showAlert("Please fill in all fields", "error");
+  } else {
+    ui.addBookToList(book);
+    ui.showAlert("Book added Successfuly", "success");
 
-  ui.clearFields();
+    ui.clearFields();
+  }
 
   e.preventDefault();
 });

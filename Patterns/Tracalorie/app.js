@@ -16,18 +16,43 @@ const ItemCtrl = (function () {
   };
 
   return {
+    getItems: function () {
+      return data.items;
+    },
     logData: function () {
       return data;
     },
   };
 })();
 
-const UICtrl = (function () {})();
+const UICtrl = (function () {
+  const UISelectors = {
+    itemList: "#item-list",
+  };
+
+  return {
+    populateList: function (items) {
+      let html = "";
+      items.forEach((item) => {
+        html += `
+        <li class="collection-item" id="item-${item.id}">
+          <strong>${item.name}:</strong> <em>${item.calories} Calories</em
+          ><a href="#" class="secondary-content"
+            ><i class="edit-item fa fa-pencil"></i
+          ></a>
+        </li>
+        `;
+      });
+      document.querySelector(UISelectors.itemList).innerHTML = html;
+    },
+  };
+})();
 
 const App = (function (ItemCtrl, UICtrl) {
   return {
     init: function () {
-      console.log("Initializing App...");
+      const items = ItemCtrl.getItems();
+      UICtrl.populateList(items);
     },
   };
 })(ItemCtrl, UICtrl);
